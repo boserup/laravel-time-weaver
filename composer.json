@@ -1,0 +1,61 @@
+{
+    "name": "boserup/laravel-time-weaver",
+    "description": "Log response time of external HTTP requests.",
+    "keywords": [
+        "boserup",
+        "laravel",
+        "time-weaver",
+        "aws",
+        "cloudwatch"
+    ],
+    "homepage": "https://github.com/boserup/laravel-time-weaver",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jonas Boserup",
+            "email": "jonas@jonasboserup.dk",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "illuminate/contracts": "^8.0|^9.0|^10.0",
+        "aws/aws-sdk-php": "^3.145"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Boserup\\LaravelTimeWeaver\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaravelTimeWeaverTests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true,
+            "kylekatarnls/update-helper": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Boserup\\LaravelTimeWeaver\\TimeWeaverServiceProvider"
+            ],
+            "aliases": {
+                "TimeWeaver": "Boserup\\LaravelTimeWeaver\\Facades\\TimeWeaver"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

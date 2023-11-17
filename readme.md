@@ -10,18 +10,19 @@ composer require boserup/laravel-time-weaver
 
 ## Getting Started
 1. **Configure AWS Credentials:**
+   By default Laravel Time Weaver logs to CloudWatch.
    Set the following environment variables to configure AWS credentials:
     - `AWS_REGION`: Your AWS region.
     - `CLOUDWATCH_KEY`: Your CloudWatch access key.
     - `CLOUDWATCH_SECRET`: Your CloudWatch secret key.
 
 2. **Customize Metric Namespace:**
-   If you wish to change the default metric namespace from "LaravelTimeWeaver," set the `TIME_WEAVER_METRIC_NAMESPACE`
-   environment variable.
+   If you wish to change the default metric namespace from "LaravelTimeWeaver," set the
+   `TIME_WEAVER_CLOUDWATCH_METRIC_NAMESPACE` environment variable.
 
 3. **Adjust Metric Name:**
-   To modify the default metric name from "ExternalHttpResponseTime," set the `TIME_WEAVER_METRIC_NAME` environment
-   variable.
+   To modify the default metric name from "ExternalHttpResponseTime," set the `TIME_WEAVER_CLOUDWATCH_METRIC_NAME`
+   environment variable.
 
 4. **Toggle Logging for all hosts:**
    By default Laravel Time Weaver will log the response time for all outgoing requests. Toggle this behaviour by setting
@@ -30,6 +31,55 @@ composer require boserup/laravel-time-weaver
 
    ```bash
    php artisan vendor:publish --tag=time-weaver-config
+   ```
+
+## Using a Custom Logger
+Laravel Time Weaver allows you to use a custom logger for recording response times. By default, the package ships with
+CloudFront metric logging. However, you have the flexibility to implement your own logger by following these steps:
+
+1. **Publish Configuration File:**
+   If you haven't already, publish the configuration file using the following command:
+
+   ```bash
+   php artisan vendor:publish --tag=time-weaver-config
+   ```
+
+   This will create a configuration file `(config/time-weaver.php)` in the `config` directory.
+
+2. **Update Configuration:**
+   Open the published configuration file. Within this file, you can customize the logger class.
+
+   ```php
+   return [
+      // Other configuration options...
+
+      'logger' => \Your\Custom\Logger\CustomLogger::class,
+
+      // Other configuration options...
+   ];
+   ```
+   
+   Set the `'logger' attribute to the fully-qualified class name of your custom logger.
+
+3. **Implement Custom Logger:**
+    Your custom logger class should implement the `LoggerContract` interface, defined as such:
+
+   ```php
+   <?php
+   
+   namespace Your\Custom\Logger;
+   
+   use Boserup\LaravelTimeWeaver\Contracts\LoggerContract;
+   
+   class CustomLogger implements LoggerContract
+   {
+      public function log(string $hostname, float $time): void
+      {
+         // Logic goes here...
+      }
+   }
+   
+   ?>
    ```
 
 ## Contributing
